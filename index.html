@@ -7,8 +7,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="main.css">
     
-    <!-- <script src="main.js"></script> -->
-    
 </head>
 <body>
     <h1>Game of Life</h1>
@@ -23,11 +21,14 @@
       </div>
       <div>
         <label for="zoom">Zoom</label>
-        <input type="range" name="zoom" id="zoom" min="10" max="100" step="5" >
+        <input type="range" name="zoom" id="zoom" min="10" max="100" step="5" value="20">
       </div>
     </div>
     
     <canvas id="world">Some Text</canvas>
-    <script src="main.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script>
+      new GameOfLife();
+    </script>
   </body>
 </html>
