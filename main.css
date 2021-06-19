@@ -1,26 +1,35 @@
-.container {
-    background: lightgrey;
-    padding: 10px;
-    height: 1000px;
-    display: grid;
-
-
+.upper-panel {
+    background-color: lightgoldenrodyellow;
+    margin: 1em;
+    padding: 1em;
 }
-.box-orange {
-    background: orange;
-    width: 100px;
-    height: 100px;
-    
-}
-.box-blue {
-    background: lightskyblue;
-    height: 50px;
-    width: 50px; 
 
+.heading {
+    text-align: center;
+    text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    color: darkgreen;
+    background-color: lightgoldenrodyellow;
 }
-.box-red {
-    background: red;
-    height: 100px;
-    width: 100px;
-    
+
+.control-panel {
+    display: flex;
+    justify-content: space-evenly;
+    list-style-type: none;
+    text-align: center;
+}
+
+#start-stop {
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 10px;
 }
