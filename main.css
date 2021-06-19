@@ -1,0 +1,26 @@
+.container {
+    background: lightgrey;
+    padding: 10px;
+    height: 1000px;
+    display: grid;
+
+
+}
+.box-orange {
+    background: orange;
+    width: 100px;
+    height: 100px;
+    
+}
+.box-blue {
+    background: lightskyblue;
+    height: 50px;
+    width: 50px; 
+
+}
+.box-red {
+    background: red;
+    height: 100px;
+    width: 100px;
+    
+}
