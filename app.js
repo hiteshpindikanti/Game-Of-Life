@@ -3,6 +3,9 @@ const HTML_ELEMENT_ID_ZOOM = 'zoom';
 const HTMP_ELEMENT_ID_SPEED = 'speed';
 const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
 
+const START_BUTTON_COLOR = "#04AA6D"
+const STOP_BUTTON_COLOR = "indianred"
+
 
 class ListSet extends Set {
     add(elem) {
@@ -49,11 +52,15 @@ class GameOfLife {
         this.playButtonDom.addEventListener('click', () => {
 
             if (this.playButtonDom.innerHTML == 'Start') {
-                this.playButtonDom.innerHTML = 'Stop';
+                this.playButtonDom.innerHTML = 'Stop ';
+                this.playButtonDom.style['background-color'] = STOP_BUTTON_COLOR;
+                this.canvasDom.style['border-color'] = START_BUTTON_COLOR;
                 this.gameSimulationFlag = true;
                 this.simulateWorld();
             } else {
                 this.playButtonDom.innerHTML = 'Start';
+                this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+                this.canvasDom.style['border-color'] = STOP_BUTTON_COLOR;
                 this.gameSimulationFlag = false;
             }
         });
@@ -67,12 +74,11 @@ class GameOfLife {
             delay = 1.0 - this.speedValue;
             if (!this.gameSimulationFlag) {
                 clearInterval(simulationId);
-            }
-            else {
+            } else {
                 let newGridIndices = this.getNextInstance(this.filledGrids);
                 this.drawGridLines();
 
-                for (let coordinates of [...newGridIndices].map(JSON.parse)) {
+                for (let coordinates of[...newGridIndices].map(JSON.parse)) {
                     this.fillGrid(coordinates);
                 }
                 i++;
@@ -87,7 +93,7 @@ class GameOfLife {
 
     drawGridLines() {
         this.canvasDom.width = window.innerWidth;
-        this.canvasDom.height = window.innerHeight - this.canvasDom.getBoundingClientRect().top;
+        this.canvasDom.height = (window.innerHeight - this.canvasDom.getBoundingClientRect().top) * 0.9;
         let ctx = this.canvasDom.getContext('2d');
 
         for (let col = 0; col <= this.canvasDom.width; col += this.zoomValue) {
@@ -112,7 +118,7 @@ class GameOfLife {
 
     refreshGrid() {
         this.drawGridLines();
-        for (let coordinates of [...this.filledGrids].map(JSON.parse)) {
+        for (let coordinates of[...this.filledGrids].map(JSON.parse)) {
             this.fillGrid(coordinates)
         }
 
@@ -153,9 +159,9 @@ class GameOfLife {
 
         let nextFilledGrids = new ListSet();
         let allAdjacentGrids = new ListSet();
-        for (let gridIndex of [...filledGrids].map(JSON.parse)) {
+        for (let gridIndex of[...filledGrids].map(JSON.parse)) {
             let lifeCount = 0;
-            for (let adjacentGridIndex of [...this.getAdjacentGrids(gridIndex)].map(JSON.parse)) {
+            for (let adjacentGridIndex of[...this.getAdjacentGrids(gridIndex)].map(JSON.parse)) {
                 if (!filledGrids.has(adjacentGridIndex)) {
                     allAdjacentGrids.add(adjacentGridIndex);
                 }
@@ -167,9 +173,9 @@ class GameOfLife {
                 nextFilledGrids.add(gridIndex)
             }
         }
-        for (let gridIndex of [...allAdjacentGrids].map(JSON.parse)) {
+        for (let gridIndex of[...allAdjacentGrids].map(JSON.parse)) {
             let lifeCount = 0;
-            for (let adjacentGridIndex of [...this.getAdjacentGrids(gridIndex)].map(JSON.parse)) {
+            for (let adjacentGridIndex of[...this.getAdjacentGrids(gridIndex)].map(JSON.parse)) {
                 if (!filledGrids.has(adjacentGridIndex)) {
                     allAdjacentGrids.add(adjacentGridIndex);
                 }

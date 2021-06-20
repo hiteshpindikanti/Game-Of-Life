@@ -7,28 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="main.css">
-    <script type="text/javascript" src="app.js"></script>
 </head>
 
 <body>
     <div class="upper-panel">
-        <p class="heading">Game of Life</h1>
-            <ul class='control-panel'>
+        <p class="heading">Game of Life</p>
+        <ul class='control-panel'>
 
-                <li class="control-panel__item">
-                    <button id='start-stop'>Start</button>
-                </li>
-                <li class="control-panel__item">
-                    <label for="speed">Speed</label>
-                    <input type="range" name="speed" id="speed" min="0" max="100" step="5">
-                </li>
-                <li class="control-panel__item">
-                    <label for="zoom">Zoom</label>
-                    <input type="range" name="zoom" id="zoom" min="10" max="100" step="5" value="20">
-                </li>
-            </ul>
+            <li class="control-panel__item">
+                <button id='start-stop'>Start</button>
+            </li>
+            <li class="control-panel__item">
+                <label class="control-label" for="speed">Speed</label>
+                <input type="range" name="speed" id="speed" min="0" max="100" step="5">
+            </li>
+            <li class="control-panel__item">
+                <label class="control-label" for="zoom">Zoom</label>
+                <input type="range" name="zoom" id="zoom" min="10" max="100" step="5" value="20">
+            </li>
+        </ul>
     </div>
     <canvas id="world"></canvas>
+    <script type="text/javascript" src="app.js"></script>
     <script>
         new GameOfLife();
     </script>

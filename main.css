@@ -1,4 +1,6 @@
 .upper-panel {
+    display: flex;
+    flex-direction: column;
     background-color: lightgoldenrodyellow;
     margin: 1em;
     padding: 1em;
@@ -7,11 +9,12 @@
 .heading {
     text-align: center;
     text-decoration: none;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana;
     font-weight: 700;
     font-size: 2em;
     color: darkgreen;
     background-color: lightgoldenrodyellow;
+    margin: 0px;
 }
 
 .control-panel {
@@ -21,15 +24,35 @@
     text-align: center;
 }
 
+.control-panel__item {
+    display: flex;
+    align-items: center;
+}
+
+.control-label {
+    text-decoration: none;
+    font-family: Verdana;
+    font-weight: 300;
+    font-size: 1em;
+    color: darkgreen;
+}
+
 #start-stop {
+    cursor: pointer;
     background-color: #04AA6D;
     border: none;
     color: white;
-    padding: 20px;
+    padding: 1em 2em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     border-radius: 10px;
+}
+
+#world {
+    border-style: solid;
+    border-width: 2px;
+    border-color: indianred;
 }
