@@ -2,6 +2,7 @@ const HTML_ELEMENT_ID_CANVAS = 'world';
 const HTML_ELEMENT_ID_ZOOM = 'zoom';
 const HTMP_ELEMENT_ID_SPEED = 'speed';
 const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
+const HTML_ELEMENT_ID_RESET_BUTTON = 'reset';
 
 const START_BUTTON_COLOR = "#04AA6D"
 const STOP_BUTTON_COLOR = "indianred"
@@ -24,15 +25,20 @@ class GameOfLife {
         this.zoomDom = document.getElementById(HTML_ELEMENT_ID_ZOOM);
         this.speedDom = document.getElementById(HTMP_ELEMENT_ID_SPEED);
         this.playButtonDom = document.getElementById(HTML_ELEMENT_ID_PLAY_BUTTON);
+        this.resetButtonDom = document.getElementById(HTML_ELEMENT_ID_RESET_BUTTON);
+
         this.zoomValue = parseInt(this.zoomDom.value);
         this.speedValue = parseInt(this.speedDom.value) / 100;
         this.filledGrids = new ListSet();
         this.gameSimulationFlag = false;
+
         this.drawGridLines();
         this.addEventListeners();
     }
 
     addEventListeners = () => {
+
+        // Event Listener for marking grids
         this.canvasDom.addEventListener("click", (e) => {
             let gridIndex = [
                 Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
@@ -41,13 +47,19 @@ class GameOfLife {
             this.filledGrids.add(gridIndex);
             this.fillGrid(gridIndex);
         });
+
+        // Event Listener for Zoom input range bar
         this.zoomDom.addEventListener('input', () => {
             this.zoomValue = parseInt(this.zoomDom.value);
             this.refreshGrid();
         });
+
+        // Event Listener for Speed input range bar
         this.speedDom.addEventListener('input', () => {
             this.speedValue = parseInt(this.speedDom.value) / 100;
         });
+
+        // Event Listener for resizing the page
         window.addEventListener('resize', () => { this.refreshGrid() })
         this.playButtonDom.addEventListener('click', () => {
 
@@ -63,6 +75,16 @@ class GameOfLife {
                 this.canvasDom.style['border-color'] = STOP_BUTTON_COLOR;
                 this.gameSimulationFlag = false;
             }
+        });
+
+        // Event Listener for Reset Button
+        this.resetButtonDom.addEventListener('click', () => {
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.canvasDom.style['border-color'] = STOP_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.filledGrids.clear();
+            this.refreshGrid();
         });
     }
 
