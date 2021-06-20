@@ -1,8 +1,16 @@
+:root {
+    /* Color Variables */
+    --start-button-color: #04AA6D;
+    --stop-button-color: indianred;
+    --upper-panel-background-color: lightgoldenrodyellow;
+    --heading-color: darkgreen;
+}
+
 .upper-panel {
     display: flex;
     flex-direction: column;
-    background-color: lightgoldenrodyellow;
-    margin: 1em;
+    background-color: var(--upper-panel-background-color);
+    margin-bottom: 1em;
     padding: 1em;
 }
 
@@ -12,8 +20,8 @@
     font-family: Verdana;
     font-weight: 700;
     font-size: 2em;
-    color: darkgreen;
-    background-color: lightgoldenrodyellow;
+    color: var(--heading-color);
+    background-color: var(--upper-panel-background-color);
     margin: 0px;
 }
 
@@ -34,12 +42,26 @@
     font-family: Verdana;
     font-weight: 300;
     font-size: 1em;
-    color: darkgreen;
+    color: var(--heading-color);
 }
 
 #start-stop {
     cursor: pointer;
-    background-color: #04AA6D;
+    background-color: var(--start-button-color);
+    border: none;
+    color: white;
+    padding: 1em 2em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 10px;
+}
+
+#reset {
+    cursor: pointer;
+    background-color: var(--stop-button-color);
     border: none;
     color: white;
     padding: 1em 2em;
@@ -54,5 +76,5 @@
 #world {
     border-style: solid;
     border-width: 2px;
-    border-color: indianred;
+    border-color: var(--stop-button-color);
 }
