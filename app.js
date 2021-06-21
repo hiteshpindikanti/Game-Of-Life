@@ -114,7 +114,8 @@ class GameOfLife {
     }
 
     drawGridLines() {
-        this.canvasDom.width = window.innerWidth;
+
+        this.canvasDom.width = window.innerWidth - 20; // -20 is hardcoded due to formatting issues
         this.canvasDom.height = (window.innerHeight - this.canvasDom.getBoundingClientRect().top) * 0.9;
         let ctx = this.canvasDom.getContext('2d');
 
