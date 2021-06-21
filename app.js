@@ -66,13 +66,11 @@ class GameOfLife {
             if (this.playButtonDom.innerHTML == 'Start') {
                 this.playButtonDom.innerHTML = 'Stop ';
                 this.playButtonDom.style['background-color'] = STOP_BUTTON_COLOR;
-                this.canvasDom.style['border-color'] = START_BUTTON_COLOR;
                 this.gameSimulationFlag = true;
                 this.simulateWorld();
             } else {
                 this.playButtonDom.innerHTML = 'Start';
                 this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
-                this.canvasDom.style['border-color'] = STOP_BUTTON_COLOR;
                 this.gameSimulationFlag = false;
             }
         });
@@ -81,7 +79,6 @@ class GameOfLife {
         this.resetButtonDom.addEventListener('click', () => {
             this.playButtonDom.innerHTML = 'Start';
             this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
-            this.canvasDom.style['border-color'] = STOP_BUTTON_COLOR;
             this.gameSimulationFlag = false;
             this.filledGrids.clear();
             this.refreshGrid();
@@ -115,8 +112,9 @@ class GameOfLife {
 
     drawGridLines() {
 
-        this.canvasDom.width = window.innerWidth - 20; // -20 is hardcoded due to formatting issues
-        this.canvasDom.height = (window.innerHeight - this.canvasDom.getBoundingClientRect().top) * 0.9;
+        this.canvasDom.width = document.getElementsByTagName('body')[0].clientWidth - 2; //Taking into account the Border width
+        this.canvasDom.height = (window.innerHeight - document.getElementsByClassName('upper-panel')[0].clientHeight) * 0.9;
+
         let ctx = this.canvasDom.getContext('2d');
 
         for (let col = 0; col <= this.canvasDom.width; col += this.zoomValue) {
