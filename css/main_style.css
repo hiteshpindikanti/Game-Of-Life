@@ -6,6 +6,12 @@
     --heading-color: darkgreen;
 }
 
+body {
+    font-family: Verdana;
+    /* display: flex;
+    flex-direction: column; */
+}
+
 .upper-panel {
     display: flex;
     flex-direction: column;
@@ -16,7 +22,6 @@
 .heading {
     text-align: center;
     text-decoration: none;
-    font-family: Verdana;
     font-weight: 700;
     font-size: 2em;
     color: var(--heading-color);
@@ -31,6 +36,7 @@
     text-align: center;
     align-items: center;
     padding: 1vw 0vw;
+    /* TODO change vw to vh*/
 }
 
 .upper-control-panel {
@@ -50,11 +56,11 @@
     display: flex;
     align-items: center;
     padding: 1vw 2vw;
+    /* TODO change vw to vh*/
 }
 
 .control-label {
     text-decoration: none;
-    font-family: Verdana;
     font-weight: 300;
     font-size: 1em;
     color: var(--heading-color);
@@ -90,4 +96,11 @@
     border-style: solid;
     border-width: 2px;
     border-color: var(--stop-button-color);
+}
+
+.lower-panel {
+    font-size: small;
+    background-color: var(--upper-panel-background-color);
+    padding: 0.5em 2em;
+    text-align: justify;
 }

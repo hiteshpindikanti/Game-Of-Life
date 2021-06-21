@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game of Life</title>
     <link rel="icon" href="images/game_of_life_logo.png" type="image/gif">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="./css/main_style.css">
+    <link rel="stylesheet" href="./css/signature_style.css">
 </head>
 
 <body>
@@ -36,6 +37,49 @@
         </ul>
     </div>
     <canvas id="world"></canvas>
+    <div class="lower-panel">
+        <p class="description__intoduction">The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further
+            input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves. It is Turing complete and can simulate a universal constructor or any other Turing machine.</p>
+        <p class="Subheading">Rules</p>
+        <p class="description__rules>" The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, live or dead, (or populated and unpopulated, respectively). Every cell interacts
+            with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:</p>
+            <ul class="description__rules-list">
+                <li class="description__rules-list__item">Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+                <li class="description__rules-list__item">Any live cell with two or three live neighbours lives on to the next generation.</li>
+                <li class="description__rules-list__item">Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+                <li class="description__rules-list__item">Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+            </ul>
+            <cite>Source: <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">wikipedia</a></cite>
+    </div>
+
+    <div class="signature">
+        <ul class="signature__container">
+            <div class="signature__left-side">
+                <li>
+                    <a href="https://sites.google.com/view/hiteshpindikanti"><img class="signature__profile-picture" src="./images/profile_picture.jpg" alt="Profile Picture"></a>
+                </li>
+                <li>
+                    <a href="https://viterbischool.usc.edu/"><img class="signature__usc-logo" src="./images/usc_logo.png" alt="USC Logo"></a>
+                </li>
+            </div>
+            <div class="signature__right-side">
+                <li class="signature__name">Hitesh Pindikanti</li>
+                <li class="signature__title">Masters in Computer Science - Artificial Intelligence</li>
+                <li class="signature__location">Los Angeles, California - USA</li>
+                <div class="signature__contact-info">
+                    <li>
+                        <a href="mailto:hiteshpindikanti@gmail.com"><img class="signature__gmail-logo" src="./images/gmail_logo.png" alt="Email Icon"></a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/hiteshpindikanti/"><img class="signature__linkedin-logo" src="./images/linkedin_logo.webp" alt="Linkedin Logo"></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/hiteshpindikanti"><img class="signature__github-logo" src="./images/github_logo.webp" alt="Github Logo"></a>
+                    </li>
+                </div>
+            </div>
+        </ul>
+    </div>
     <script type="text/javascript" src="app.js"></script>
     <script>
         new GameOfLife();

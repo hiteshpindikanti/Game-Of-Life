@@ -1,0 +1,79 @@
+.signature {
+    width: 100%;
+    margin-top: 0px;
+    padding-top: 10px;
+    background-color: ivory;
+}
+
+.signature__container {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content: space-between;
+    height: 150px;
+    max-width: 500px;
+    width: 100%;
+    margin: 0px;
+    padding: 10px;
+}
+
+.signature__container .signature__left-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid black;
+    padding-right: 10px;
+}
+
+.signature__container .signature__left-side .signature__profile-picture {
+    max-height: 80px;
+    max-width: 80px;
+    height: auto;
+    width: auto;
+    border-radius: 100%;
+}
+
+.signature__container .signature__left-side .signature__usc-logo {
+    max-width: 120px;
+    height: auto;
+    width: auto;
+}
+
+.signature__container .signature__right-side {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    width: auto;
+    justify-content: space-around;
+    padding-left: 10px;
+}
+
+.signature__container .signature__right-side .signature__contact-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.signature__container .signature__right-side .signature__contact-info .signature__gmail-logo,
+.signature__container .signature__right-side .signature__contact-info .signature__linkedin-logo,
+.signature__container .signature__right-side .signature__contact-info .signature__github-logo {
+    max-height: 30px;
+    margin: 10px 10px;
+}
+
+.signature__container .signature__right-side .signature__name {
+    font-size: large;
+    font-weight: bold;
+}
+
+.signature__container .signature__right-side .signature__title {
+    font-size: small;
+    font-style: italic;
+}
+
+.signature__container .signature__right-side .signature__location {
+    font-size: small;
+}
