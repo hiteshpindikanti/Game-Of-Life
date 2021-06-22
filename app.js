@@ -16,6 +16,9 @@ class ListSet extends Set {
     has(elem) {
         return super.has(typeof elem === 'object' ? JSON.stringify(elem) : elem);
     }
+    delete(elem) {
+        return super.delete(typeof elem === 'object' ? JSON.stringify(elem) : elem);
+    }
 }
 
 
@@ -34,8 +37,10 @@ class GameOfLife {
         this.speedValue = parseInt(this.speedDom.value) / 100;
         this.filledGrids = new ListSet();
         this.gridLines = Boolean(this.gridLinesToggleDom.checked);
-        console.log('this.gridLines', this.gridLines);
         this.gameSimulationFlag = false;
+        this.mouseDown = false;
+        this.gridIndex = [-1, -1];
+        this.prevGridIndex = [-1, -1];
 
         this.drawGridLines();
         this.addEventListeners();
@@ -43,14 +48,51 @@ class GameOfLife {
 
     addEventListeners = () => {
 
-        // Event Listener for marking grids
-        this.canvasDom.addEventListener("click", (e) => {
-            let gridIndex = [
+        // Event Listeners for marking grids
+        this.canvasDom.addEventListener("mousedown", (e) => {
+            this.mouseDown = true;
+            this.prevGridIndex = this.gridIndex;
+            this.gridIndex = [
                 Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
                 Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
-            ]
-            this.filledGrids.add(gridIndex);
-            this.fillGrid(gridIndex);
+            ];
+
+            if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                if (this.filledGrids.has(this.gridIndex)) {
+                    this.filledGrids.delete(this.gridIndex);
+                    this.emptyGrid(this.gridIndex);
+
+                } else {
+                    this.filledGrids.add(this.gridIndex);
+                    this.fillGrid(this.gridIndex);
+                }
+            }
+
+        });
+        this.canvasDom.addEventListener("mouseup", () => {
+            this.mouseDown = false;
+            this.gridIndex = [-1, -1];
+
+        });
+        this.canvasDom.addEventListener("mousemove", (e) => {
+            if (this.mouseDown) {
+                this.prevGridIndex = this.gridIndex;
+                this.gridIndex = [
+                    Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
+                    Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
+                ];
+
+                if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                    if (this.filledGrids.has(this.gridIndex)) {
+                        this.filledGrids.delete(this.gridIndex);
+                        this.emptyGrid(this.gridIndex);
+
+                    } else {
+                        this.filledGrids.add(this.gridIndex);
+                        this.fillGrid(this.gridIndex);
+                    }
+                }
+            }
         });
 
         // Event Listener for Zoom input range bar
@@ -157,10 +199,25 @@ class GameOfLife {
 
     fillGrid(gridIndex) {
         let ctx = this.canvasDom.getContext('2d');
-        ctx.fillRect(gridIndex[0] * this.zoomValue, gridIndex[1] * this.zoomValue, this.zoomValue, this.zoomValue);
+        ctx.fillStyle = 'black';
+
+        if (this.gridLines) {
+            ctx.fillRect((gridIndex[0] * this.zoomValue) + 1, (gridIndex[1] * this.zoomValue) + 1, this.zoomValue - 2, this.zoomValue - 2);
+        } else {
+            ctx.fillRect(gridIndex[0] * this.zoomValue, gridIndex[1] * this.zoomValue, this.zoomValue, this.zoomValue);
+        }
     }
 
+    emptyGrid(gridIndex) {
+        let ctx = this.canvasDom.getContext('2d');
+        ctx.fillStyle = 'white';
+        if (this.gridLines) {
+            ctx.fillRect((gridIndex[0] * this.zoomValue) + 1, (gridIndex[1] * this.zoomValue) + 1, this.zoomValue - 2, this.zoomValue - 2);
+        } else {
+            ctx.fillRect(gridIndex[0] * this.zoomValue, gridIndex[1] * this.zoomValue, this.zoomValue, this.zoomValue);
+        }
 
+    }
     refreshGrid() {
 
         this.drawGridLines();
