@@ -3,6 +3,7 @@ const HTML_ELEMENT_ID_ZOOM = 'zoom';
 const HTMP_ELEMENT_ID_SPEED = 'speed';
 const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
 const HTML_ELEMENT_ID_RESET_BUTTON = 'reset';
+const HTML_ELEMENT_ID_TOGGLE_SWITCH = 'toggle-switch';
 
 const START_BUTTON_COLOR = "#04AA6D"
 const STOP_BUTTON_COLOR = "indianred"
@@ -26,10 +27,14 @@ class GameOfLife {
         this.speedDom = document.getElementById(HTMP_ELEMENT_ID_SPEED);
         this.playButtonDom = document.getElementById(HTML_ELEMENT_ID_PLAY_BUTTON);
         this.resetButtonDom = document.getElementById(HTML_ELEMENT_ID_RESET_BUTTON);
+        this.gridLinesToggleDom = document.getElementById(HTML_ELEMENT_ID_TOGGLE_SWITCH);
 
         this.zoomValue = parseInt(this.zoomDom.value);
+        this.prevZoomValue = this.zoomValue;
         this.speedValue = parseInt(this.speedDom.value) / 100;
         this.filledGrids = new ListSet();
+        this.gridLines = Boolean(this.gridLinesToggleDom.checked);
+        console.log('this.gridLines', this.gridLines);
         this.gameSimulationFlag = false;
 
         this.drawGridLines();
@@ -50,7 +55,17 @@ class GameOfLife {
 
         // Event Listener for Zoom input range bar
         this.zoomDom.addEventListener('input', () => {
+            this.prevZoomValue = this.zoomValue;
             this.zoomValue = parseInt(this.zoomDom.value);
+            if (this.prevZoomValue >= 10 && this.zoomValue < 10) {
+                this.gridLinesToggleDom.checked = false;
+                this.gridLines = false;
+                this.refreshGrid();
+            } else if (this.zoomValue >= 10 && this.prevZoomValue < 10) {
+                this.gridLinesToggleDom.checked = true;
+                this.gridLines = true;
+                this.refreshGrid();
+            }
             this.refreshGrid();
         });
 
@@ -83,6 +98,12 @@ class GameOfLife {
             this.filledGrids.clear();
             this.refreshGrid();
         });
+
+        //Event Listener for Grid Lines Toggle Switch
+        this.gridLinesToggleDom.addEventListener('change', () => {
+            this.gridLines = !this.gridLines;
+            this.refreshGrid();
+        });
     }
 
 
@@ -95,7 +116,9 @@ class GameOfLife {
                 clearInterval(simulationId);
             } else {
                 let newGridIndices = this.getNextInstance(this.filledGrids);
+
                 this.drawGridLines();
+
 
                 for (let coordinates of[...newGridIndices].map(JSON.parse)) {
                     this.fillGrid(coordinates);
@@ -117,16 +140,17 @@ class GameOfLife {
 
         let ctx = this.canvasDom.getContext('2d');
 
-        for (let col = 0; col <= this.canvasDom.width; col += this.zoomValue) {
-            ctx.moveTo(col, 0);
-            ctx.lineTo(col, this.canvasDom.height);
-        }
+        if (this.gridLines) {
+            for (let col = 0; col <= this.canvasDom.width; col += this.zoomValue) {
+                ctx.moveTo(col, 0);
+                ctx.lineTo(col, this.canvasDom.height);
+            }
 
-        for (let row = 0; row <= this.canvasDom.height; row += this.zoomValue) {
-            ctx.moveTo(0, row);
-            ctx.lineTo(this.canvasDom.width, row)
+            for (let row = 0; row <= this.canvasDom.height; row += this.zoomValue) {
+                ctx.moveTo(0, row);
+                ctx.lineTo(this.canvasDom.width, row)
+            }
         }
-
         ctx.strokeStyle = 'black';
         ctx.stroke();
     }
@@ -138,7 +162,9 @@ class GameOfLife {
 
 
     refreshGrid() {
+
         this.drawGridLines();
+
         for (let coordinates of[...this.filledGrids].map(JSON.parse)) {
             this.fillGrid(coordinates)
         }
