@@ -12,8 +12,42 @@
 </head>
 
 <body>
-    <div class="upper-panel">
+    <div class="title">
         <p class="heading">Game of Life</p>
+        <div class="options-icon-outer">
+            <img class="options-icon" src="./images/options_icon.png" alt="Options Icon">
+            <div class="dropdown-content">
+                <p class="dropdown-content__subheading">Still Lifes</p>
+                <ul class="dropdown-content__sublist">
+                    <li class="dropdown-content__list-element" id="still-lifes__block">Block</li>
+                    <li class="dropdown-content__list-element" id="still-lifes__bee-hive">Bee-hive</li>
+                    <li class="dropdown-content__list-element" id="still-lifes__loaf">Loaf</li>
+                    <li class="dropdown-content__list-element" id="still-lifes__boat">Boat</li>
+                    <li class="dropdown-content__list-element" id="still-lifes__tub"> Tub</li>
+                </ul>
+                <p class="dropdown-content__subheading"> Oscillators</p>
+                <ul class="dropdown-content__sublist">
+                    <li class="dropdown-content__list-element" id="oscillators__blinker">Blinker</li>
+                    <li class="dropdown-content__list-element" id="oscillators__toad">Toad</li>
+                    <li class="dropdown-content__list-element" id="oscillators__beacon">Beacon</li>
+                    <li class="dropdown-content__list-element" id="oscillators__pulsar">Pulsar</li>
+                </ul>
+                <p class="dropdown-content__subheading">Spaceships</p>
+                <ul class="dropdown-content__sublist">
+                    <li class="dropdown-content__list-element" id="spaceships__glider">Glider</li>
+                    <li class="dropdown-content__list-element" id="spaceships__light-weight">Light-Weight Spaceship</li>
+                    <li class="dropdown-content__list-element" id="spaceships__medium-weight">Medium-Weight Spaceship</li>
+                    <li class="dropdown-content__list-element" id="spaceships__heavy-weight">Heavy-Weight Spaceship</li>
+                </ul>
+                <p class="dropdown-content__subheading">Special</p>
+                <ul class="dropdown-content__sublist">
+                    <li class="dropdown-content__list-element" id="special__gosper-glider-gun">Gosper Glider Gun</li>
+                </ul>
+                <p class="dropdown-content__subheading">Your Patterns (Comming Soon)</p>
+            </div>
+        </div>
+    </div>
+    <div class="upper-panel">
         <ul class='control-panel'>
             <div class='upper-control-panel'>
                 <li class="control-panel__item">
@@ -47,7 +81,7 @@
     <div class="lower-panel">
         <p class="description__intoduction">The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further
             input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves. It is Turing complete and can simulate a universal constructor or any other Turing machine.</p>
-        <p class="Subheading">Rules</p>
+        <p class="subheading">Rules</p>
         <p class="description__rules>" The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, live or dead, (or populated and unpopulated, respectively). Every cell interacts
             with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:</p>
             <ul class="description__rules-list">

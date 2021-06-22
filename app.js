@@ -5,6 +5,25 @@ const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
 const HTML_ELEMENT_ID_RESET_BUTTON = 'reset';
 const HTML_ELEMENT_ID_TOGGLE_SWITCH = 'toggle-switch';
 
+const HTML_ELEMENT_ID_STILL_LIFE_BLOCK = 'still-lifes__block';
+const HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE = 'still-lifes__bee-hive';
+const HTML_ELEMENT_ID_STILL_LIFE_LOAF = 'still-lifes__loaf';
+const HTML_ELEMENT_ID_STILL_LIFE_BOAT = 'still-lifes__boat';
+const HTML_ELEMENT_ID_STILL_LIFE_TUB = 'still-lifes__tub';
+
+const HTML_ELEMENT_ID_OSCILLATOR_BLINKER = 'oscillators__blinker';
+const HTML_ELEMENT_ID_OSCILLATOR_TOAD = 'oscillators__toad';
+const HTML_ELEMENT_ID_OSCILLATOR_BEACON = 'oscillators__beacon';
+const HTML_ELEMENT_ID_OSCILLATOR_PULSAR = 'oscillators__pulsar';
+
+const HTML_ELEMENT_ID_SPACESHIPS_GLIDER = 'spaceships__glider';
+const HTML_ELEMENT_ID_SPACESHIPS_LIGHT_WEIGHT = 'spaceships__light-weight';
+const HTML_ELEMENT_ID_SPACESHIPS_MEDIUM_WEIGHT = 'spaceships__medium-weight';
+const HTML_ELEMENT_ID_SPACESHIPS_HEAVY_WEIGHT = 'spaceships__heavy-weight';
+
+const HTML_ELEMENT_ID_SPECIAL_GOSPER_GLIDER_GUN = 'special__gosper-glider-gun';
+
+
 const START_BUTTON_COLOR = "#04AA6D"
 const STOP_BUTTON_COLOR = "indianred"
 
@@ -32,21 +51,28 @@ class GameOfLife {
         this.resetButtonDom = document.getElementById(HTML_ELEMENT_ID_RESET_BUTTON);
         this.gridLinesToggleDom = document.getElementById(HTML_ELEMENT_ID_TOGGLE_SWITCH);
 
-        this.zoomValue = parseInt(this.zoomDom.value);
         this.prevZoomValue = this.zoomValue;
-        this.speedValue = parseInt(this.speedDom.value) / 100;
-        this.filledGrids = new ListSet();
-        this.gridLines = Boolean(this.gridLinesToggleDom.checked);
         this.gameSimulationFlag = false;
         this.mouseDown = false;
         this.gridIndex = [-1, -1];
         this.prevGridIndex = [-1, -1];
 
+
+        this.zoomValue = parseInt(this.zoomDom.value);
+        this.speedValue = parseInt(this.speedDom.value) / 100;
+        this.filledGrids = new ListSet();
+        this.gridLines = Boolean(this.gridLinesToggleDom.checked);
+
+
         this.drawGridLines();
-        this.addEventListeners();
+        this.addCanvasEventListeners();
+        this.addStillLifesEventListeners();
+        this.addOscillatorsEventListeners();
+        this.addSpaceshipsEventListeners();
+        this.addSpecialEventListeners();
     }
 
-    addEventListeners = () => {
+    addCanvasEventListeners = () => {
 
         // Event Listeners for marking grids
         this.canvasDom.addEventListener("mousedown", (e) => {
@@ -146,8 +172,8 @@ class GameOfLife {
             this.gridLines = !this.gridLines;
             this.refreshGrid();
         });
-    }
 
+    }
 
     simulateWorld() {
         let delay = 1.0 - this.speedValue;
@@ -295,4 +321,372 @@ class GameOfLife {
 
     }
 
+    // Configuration Event Listerers
+
+    addStillLifesEventListeners() {
+        //Event Listener for Block
+        document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BLOCK).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([2, 2]);
+            this.filledGrids.add([2, 3]);
+            this.filledGrids.add([3, 2]);
+            this.filledGrids.add([3, 3]);
+
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Bee-hive
+        document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([3, 3]);
+            this.filledGrids.add([4, 3]);
+            this.filledGrids.add([5, 4]);
+            this.filledGrids.add([2, 4]);
+            this.filledGrids.add([3, 5]);
+            this.filledGrids.add([4, 5]);
+
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Loaf
+        document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_LOAF).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([4, 2]);
+            this.filledGrids.add([5, 2]);
+            this.filledGrids.add([6, 3]);
+            this.filledGrids.add([6, 4]);
+            this.filledGrids.add([5, 5]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([3, 3]);
+
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Boat
+        document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BOAT).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([3, 2]);
+            this.filledGrids.add([4, 2]);
+            this.filledGrids.add([3, 3]);
+            this.filledGrids.add([5, 3]);
+            this.filledGrids.add([4, 4]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Tub
+        document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_TUB).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([4, 2]);
+            this.filledGrids.add([3, 3]);
+            this.filledGrids.add([5, 3]);
+            this.filledGrids.add([4, 4]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+    }
+
+    addOscillatorsEventListeners() {
+        //Event Listener for Blinker
+        document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_BLINKER).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+            this.filledGrids.add([3, 4]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([5, 4]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 50 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Toad
+        document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_TOAD).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+            this.filledGrids.add([5, 3]);
+            this.filledGrids.add([2, 4]);
+            this.filledGrids.add([4, 3]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([3, 4]);
+            this.filledGrids.add([3, 3]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 50 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Beacon
+        document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_BEACON).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+            this.filledGrids.add([3, 3]);
+            this.filledGrids.add([4, 3]);
+            this.filledGrids.add([3, 4]);
+            this.filledGrids.add([5, 6]);
+            this.filledGrids.add([6, 6]);
+            this.filledGrids.add([6, 5]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([5, 5]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 30;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 50 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Pulsar
+        document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_PULSAR).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([8, 8]);
+            this.filledGrids.add([8, 7]);
+            this.filledGrids.add([8, 6]);
+            this.filledGrids.add([7, 9]);
+            this.filledGrids.add([6, 9]);
+            this.filledGrids.add([5, 9]);
+            this.filledGrids.add([10, 6]);
+            this.filledGrids.add([10, 7]);
+            this.filledGrids.add([10, 8]);
+            this.filledGrids.add([11, 9]);
+            this.filledGrids.add([12, 9]);
+            this.filledGrids.add([13, 9]);
+            this.filledGrids.add([15, 6]);
+            this.filledGrids.add([15, 7]);
+            this.filledGrids.add([15, 8]);
+            this.filledGrids.add([11, 4]);
+            this.filledGrids.add([12, 4]);
+            this.filledGrids.add([13, 4]);
+            this.filledGrids.add([7, 4]);
+            this.filledGrids.add([6, 4]);
+            this.filledGrids.add([5, 4]);
+            this.filledGrids.add([3, 8]);
+            this.filledGrids.add([3, 7]);
+            this.filledGrids.add([3, 6]);
+            this.filledGrids.add([7, 11]);
+            this.filledGrids.add([6, 11]);
+            this.filledGrids.add([5, 11]);
+            this.filledGrids.add([8, 12]);
+            this.filledGrids.add([8, 13]);
+            this.filledGrids.add([8, 14]);
+            this.filledGrids.add([10, 12]);
+            this.filledGrids.add([10, 13]);
+            this.filledGrids.add([10, 14]);
+            this.filledGrids.add([11, 11]);
+            this.filledGrids.add([12, 11]);
+            this.filledGrids.add([13, 11]);
+            this.filledGrids.add([15, 12]);
+            this.filledGrids.add([15, 13]);
+            this.filledGrids.add([15, 14]);
+            this.filledGrids.add([11, 16]);
+            this.filledGrids.add([12, 16]);
+            this.filledGrids.add([13, 16]);
+            this.filledGrids.add([7, 16]);
+            this.filledGrids.add([6, 16]);
+            this.filledGrids.add([5, 16]);
+            this.filledGrids.add([3, 12]);
+            this.filledGrids.add([3, 13]);
+            this.filledGrids.add([3, 14]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 20;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 50 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+    }
+    addSpaceshipsEventListeners() {
+        //Event Listener for Glider
+        document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_GLIDER).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+            this.filledGrids.add([3, 4]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([4, 3]);
+            this.filledGrids.add([5, 3]);
+            this.filledGrids.add([3, 2]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 20;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 90 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Light-Weight Spaceship
+        document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_LIGHT_WEIGHT).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([5, 4]);
+            this.filledGrids.add([6, 4]);
+            this.filledGrids.add([7, 4]);
+            this.filledGrids.add([7, 5]);
+            this.filledGrids.add([7, 6]);
+            this.filledGrids.add([6, 7]);
+            this.filledGrids.add([3, 5]);
+            this.filledGrids.add([3, 7]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 15;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 90 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Medium weight spaceship
+        document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_MEDIUM_WEIGHT).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([5, 3]);
+            this.filledGrids.add([6, 3]);
+            this.filledGrids.add([7, 3]);
+            this.filledGrids.add([8, 3]);
+            this.filledGrids.add([9, 3]);
+            this.filledGrids.add([9, 4]);
+            this.filledGrids.add([9, 5]);
+            this.filledGrids.add([8, 6]);
+            this.filledGrids.add([4, 4]);
+            this.filledGrids.add([4, 6]);
+            this.filledGrids.add([6, 7]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 15;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 90 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+
+        //Event Listener for Heavy weight spaceship
+        document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_HEAVY_WEIGHT).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([9, 3]);
+            this.filledGrids.add([9, 4]);
+            this.filledGrids.add([9, 5]);
+            this.filledGrids.add([8, 5]);
+            this.filledGrids.add([7, 5]);
+            this.filledGrids.add([6, 5]);
+            this.filledGrids.add([5, 5]);
+            this.filledGrids.add([4, 5]);
+            this.filledGrids.add([3, 4]);
+            this.filledGrids.add([3, 2]);
+            this.filledGrids.add([5, 1]);
+            this.filledGrids.add([6, 1]);
+            this.filledGrids.add([8, 2]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 15;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 90 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.refreshGrid();
+        });
+    }
+
+    addSpecialEventListeners() {
+        //Event Listener for Gosper Glider Gun
+        document.getElementById(HTML_ELEMENT_ID_SPECIAL_GOSPER_GLIDER_GUN).addEventListener('mousedown', () => {
+            this.filledGrids.clear();
+
+            this.filledGrids.add([3, 6]);
+            this.filledGrids.add([4, 6]);
+            this.filledGrids.add([4, 7]);
+            this.filledGrids.add([3, 7]);
+            this.filledGrids.add([13, 7]);
+            this.filledGrids.add([13, 6]);
+            this.filledGrids.add([13, 8]);
+            this.filledGrids.add([14, 5]);
+            this.filledGrids.add([15, 4]);
+            this.filledGrids.add([16, 4]);
+            this.filledGrids.add([14, 9]);
+            this.filledGrids.add([15, 10]);
+            this.filledGrids.add([16, 10]);
+            this.filledGrids.add([18, 5]);
+            this.filledGrids.add([18, 9]);
+            this.filledGrids.add([19, 8]);
+            this.filledGrids.add([19, 7]);
+            this.filledGrids.add([19, 6]);
+            this.filledGrids.add([20, 7]);
+            this.filledGrids.add([17, 7]);
+            this.filledGrids.add([23, 6]);
+            this.filledGrids.add([24, 6]);
+            this.filledGrids.add([24, 5]);
+            this.filledGrids.add([23, 5]);
+            this.filledGrids.add([23, 4]);
+            this.filledGrids.add([24, 4]);
+            this.filledGrids.add([25, 3]);
+            this.filledGrids.add([27, 3]);
+            this.filledGrids.add([27, 2]);
+            this.filledGrids.add([25, 7]);
+            this.filledGrids.add([27, 7]);
+            this.filledGrids.add([27, 8]);
+            this.filledGrids.add([37, 4]);
+            this.filledGrids.add([38, 4]);
+            this.filledGrids.add([38, 5]);
+            this.filledGrids.add([37, 5]);
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+            this.zoomValue = 10;
+            this.zoomDom.value = this.zoomValue;
+            this.speedValue = 90 / 100;
+            this.speedDom.value = this.speedValue * 100;
+            this.refreshGrid();
+        });
+    }
 }

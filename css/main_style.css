@@ -17,6 +17,68 @@ body {
     width: 100%;
 }
 
+.title {
+    background-color: var(--upper-panel-background-color);
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.options-icon-outer {
+    background-color: #2196F3;
+    border-radius: 100%;
+    width: 35px;
+    height: 35px;
+}
+
+.options-icon {
+    margin: 7px;
+    width: 20px;
+    filter: invert(1);
+}
+
+.options-icon-outer:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.dropdown-content .dropdown-content__subheading {
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+
+.dropdown-content .dropdown-content__sublist {
+    list-style-type: none;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.dropdown-content .dropdown-content__list-element {
+    margin: 2px 0px;
+    width: 100%;
+    background-color: lightblue;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
+
 .heading {
     text-align: center;
     text-decoration: none;
@@ -33,8 +95,7 @@ body {
     list-style-type: none;
     text-align: center;
     align-items: center;
-    padding: 1vw 0vw;
-    /* TODO change vw to vh*/
+    padding: 10px 0px;
 }
 
 .upper-control-panel {
@@ -64,6 +125,7 @@ body {
     width: 40px;
     height: 24px;
     margin-top: 5px;
+    margin-left: 5px;
 }
 
 .switch input {
@@ -113,6 +175,9 @@ input:checked+.slider:before {
 @media screen and (max-width: 600px) {
     .control-panel {
         flex-direction: column;
+    }
+    .middle-control-panel {
+        flex-direction: row;
     }
 }
 
@@ -165,4 +230,8 @@ input:checked+.slider:before {
     background-color: var(--upper-panel-background-color);
     padding: 0.5em 2em;
     text-align: justify;
+}
+
+.lower-panel .subheading {
+    font-weight: bolder;
 }
