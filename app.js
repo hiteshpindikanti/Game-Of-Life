@@ -4,6 +4,8 @@ const HTMP_ELEMENT_ID_SPEED = 'speed';
 const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
 const HTML_ELEMENT_ID_RESET_BUTTON = 'reset';
 const HTML_ELEMENT_ID_TOGGLE_SWITCH = 'toggle-switch';
+const HTML_ELEMENT_ID_NAVIGATION_CHECKBOX = 'canvas-navigation-checkbox'
+const HTML_ELEMENT_ID_NAVIGATION_IMG = 'canvas-navigation-icon'
 
 const HTML_ELEMENT_ID_STILL_LIFE_BLOCK = 'still-lifes__block';
 const HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE = 'still-lifes__bee-hive';
@@ -50,12 +52,16 @@ class GameOfLife {
         this.playButtonDom = document.getElementById(HTML_ELEMENT_ID_PLAY_BUTTON);
         this.resetButtonDom = document.getElementById(HTML_ELEMENT_ID_RESET_BUTTON);
         this.gridLinesToggleDom = document.getElementById(HTML_ELEMENT_ID_TOGGLE_SWITCH);
+        this.navigationCheckboxDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_CHECKBOX);
+        this.navigationImageDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_IMG);
 
         this.prevZoomValue = this.zoomValue;
         this.gameSimulationFlag = false;
         this.mouseDown = false;
         this.gridIndex = [-1, -1];
         this.prevGridIndex = [-1, -1];
+        this.isNavigationEnabled = false;
+        this.navigationInitialIndex = [-1, -1];
 
 
         this.zoomValue = parseInt(this.zoomDom.value);
@@ -76,27 +82,31 @@ class GameOfLife {
 
         // Event Listeners for marking grids
         this.canvasDom.addEventListener("mousedown", (e) => {
-            this.mouseDown = true;
             this.prevGridIndex = this.gridIndex;
             this.gridIndex = [
                 Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
                 Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
             ];
 
-            if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
-                if (this.filledGrids.has(this.gridIndex)) {
-                    this.filledGrids.delete(this.gridIndex);
-                    this.emptyGrid(this.gridIndex);
+            this.mouseDown = true;
+            if (!this.isNavigationEnabled) {
+                //Mark the grids
+                if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                    if (this.filledGrids.has(this.gridIndex)) {
+                        this.filledGrids.delete(this.gridIndex);
+                        this.emptyGrid(this.gridIndex);
 
-                } else {
-                    this.filledGrids.add(this.gridIndex);
-                    this.fillGrid(this.gridIndex);
+                    } else {
+                        this.filledGrids.add(this.gridIndex);
+                        this.fillGrid(this.gridIndex);
+                    }
                 }
             }
 
         });
         this.canvasDom.addEventListener("mouseup", () => {
             this.mouseDown = false;
+
             this.gridIndex = [-1, -1];
 
         });
@@ -107,15 +117,27 @@ class GameOfLife {
                     Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
                     Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
                 ];
-
                 if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
-                    if (this.filledGrids.has(this.gridIndex)) {
-                        this.filledGrids.delete(this.gridIndex);
-                        this.emptyGrid(this.gridIndex);
-
+                    if (this.isNavigationEnabled) {
+                        //Navigate the Canvas
+                        if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                            let newFilledGrids = this.shiftFilledGrids(this.filledGrids,
+                                this.gridIndex[0] - this.prevGridIndex[0],
+                                this.gridIndex[1] - this.prevGridIndex[1]);
+                            this.filledGrids = newFilledGrids;
+                            this.refreshGrid();
+                        }
                     } else {
-                        this.filledGrids.add(this.gridIndex);
-                        this.fillGrid(this.gridIndex);
+                        // Mark Grids
+
+                        if (this.filledGrids.has(this.gridIndex)) {
+                            this.filledGrids.delete(this.gridIndex);
+                            this.emptyGrid(this.gridIndex);
+
+                        } else {
+                            this.filledGrids.add(this.gridIndex);
+                            this.fillGrid(this.gridIndex);
+                        }
                     }
                 }
             }
@@ -173,6 +195,15 @@ class GameOfLife {
             this.refreshGrid();
         });
 
+        //Event Listener for Navigation Checkbox
+        this.navigationCheckboxDom.addEventListener('change', () => {
+            this.isNavigationEnabled = this.navigationCheckboxDom.checked;
+            if (this.isNavigationEnabled) {
+                this.navigationImageDom.style['filter'] = 'invert(1)';
+            } else {
+                this.navigationImageDom.style['filter'] = 'none';
+            }
+        })
     }
 
     simulateWorld() {
@@ -318,6 +349,16 @@ class GameOfLife {
             }
         }
         return nextFilledGrids;
+
+    }
+
+    shiftFilledGrids(filledGrids, xShift, yShift) {
+
+        let newFilledGrids = new ListSet();
+        for (let gridIndex of[...filledGrids].map(JSON.parse)) {
+            newFilledGrids.add([gridIndex[0] + xShift, gridIndex[1] + yShift]);
+        }
+        return newFilledGrids;
 
     }
 
