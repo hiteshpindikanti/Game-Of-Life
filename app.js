@@ -4,8 +4,9 @@ const HTMP_ELEMENT_ID_SPEED = 'speed';
 const HTML_ELEMENT_ID_PLAY_BUTTON = 'start-stop';
 const HTML_ELEMENT_ID_RESET_BUTTON = 'reset';
 const HTML_ELEMENT_ID_TOGGLE_SWITCH = 'toggle-switch';
-const HTML_ELEMENT_ID_NAVIGATION_CHECKBOX = 'canvas-navigation-checkbox'
-const HTML_ELEMENT_ID_NAVIGATION_IMG = 'canvas-navigation-icon'
+const HTML_ELEMENT_ID_NAVIGATION_CHECKBOX = 'canvas-navigation-checkbox';
+const HTML_ELEMENT_ID_NAVIGATION_IMG = 'canvas-navigation-icon';
+const HTML_ELEMENT_ID_GENERATION_NUMBER = 'generation-number';
 
 const HTML_ELEMENT_ID_STILL_LIFE_BLOCK = 'still-lifes__block';
 const HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE = 'still-lifes__bee-hive';
@@ -54,6 +55,7 @@ class GameOfLife {
         this.gridLinesToggleDom = document.getElementById(HTML_ELEMENT_ID_TOGGLE_SWITCH);
         this.navigationCheckboxDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_CHECKBOX);
         this.navigationImageDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_IMG);
+        this.generationNumberDom = document.getElementById(HTML_ELEMENT_ID_GENERATION_NUMBER);
 
         this.prevZoomValue = this.zoomValue;
         this.gameSimulationFlag = false;
@@ -181,13 +183,7 @@ class GameOfLife {
         });
 
         // Event Listener for Reset Button
-        this.resetButtonDom.addEventListener('click', () => {
-            this.playButtonDom.innerHTML = 'Start';
-            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
-            this.gameSimulationFlag = false;
-            this.filledGrids.clear();
-            this.refreshGrid();
-        });
+        this.resetButtonDom.addEventListener('click', () => { this.resetCanvas(); });
 
         //Event Listener for Grid Lines Toggle Switch
         this.gridLinesToggleDom.addEventListener('change', () => {
@@ -206,6 +202,15 @@ class GameOfLife {
         })
     }
 
+    resetCanvas() {
+        this.playButtonDom.innerHTML = 'Start';
+        this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+        this.gameSimulationFlag = false;
+        this.filledGrids.clear();
+        this.resetGenerationNumber();
+        this.refreshGrid();
+    }
+
     simulateWorld() {
         let delay = 1.0 - this.speedValue;
         let i = 0;
@@ -215,6 +220,7 @@ class GameOfLife {
                 clearInterval(simulationId);
             } else {
                 let newGridIndices = this.getNextInstance(this.filledGrids);
+                this.incrementGenerationNumber();
 
                 this.drawGridLines();
 
@@ -362,12 +368,18 @@ class GameOfLife {
 
     }
 
-    // Configuration Event Listerers
+    incrementGenerationNumber() {
+        this.generationNumberDom.innerHTML = parseInt(this.generationNumberDom.innerHTML) + 1;
+    }
+    resetGenerationNumber() {
+            this.generationNumberDom.innerHTML = 0;
+        }
+        // Configuration Event Listerers
 
     addStillLifesEventListeners() {
         //Event Listener for Block
         document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BLOCK).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([2, 2]);
             this.filledGrids.add([2, 3]);
@@ -385,7 +397,7 @@ class GameOfLife {
 
         //Event Listener for Bee-hive
         document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([3, 3]);
             this.filledGrids.add([4, 3]);
@@ -403,7 +415,7 @@ class GameOfLife {
 
         //Event Listener for Loaf
         document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_LOAF).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([4, 2]);
             this.filledGrids.add([5, 2]);
@@ -424,7 +436,7 @@ class GameOfLife {
 
         //Event Listener for Boat
         document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_BOAT).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([3, 2]);
             this.filledGrids.add([4, 2]);
@@ -442,7 +454,7 @@ class GameOfLife {
 
         //Event Listener for Tub
         document.getElementById(HTML_ELEMENT_ID_STILL_LIFE_TUB).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([4, 2]);
             this.filledGrids.add([3, 3]);
@@ -461,7 +473,7 @@ class GameOfLife {
     addOscillatorsEventListeners() {
         //Event Listener for Blinker
         document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_BLINKER).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
             this.filledGrids.add([3, 4]);
             this.filledGrids.add([4, 4]);
             this.filledGrids.add([5, 4]);
@@ -478,7 +490,7 @@ class GameOfLife {
 
         //Event Listener for Toad
         document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_TOAD).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
             this.filledGrids.add([5, 3]);
             this.filledGrids.add([2, 4]);
             this.filledGrids.add([4, 3]);
@@ -498,7 +510,7 @@ class GameOfLife {
 
         //Event Listener for Beacon
         document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_BEACON).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
             this.filledGrids.add([3, 3]);
             this.filledGrids.add([4, 3]);
             this.filledGrids.add([3, 4]);
@@ -520,7 +532,7 @@ class GameOfLife {
 
         //Event Listener for Pulsar
         document.getElementById(HTML_ELEMENT_ID_OSCILLATOR_PULSAR).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([8, 8]);
             this.filledGrids.add([8, 7]);
@@ -584,7 +596,7 @@ class GameOfLife {
     addSpaceshipsEventListeners() {
         //Event Listener for Glider
         document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_GLIDER).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
             this.filledGrids.add([3, 4]);
             this.filledGrids.add([4, 4]);
             this.filledGrids.add([4, 3]);
@@ -603,7 +615,7 @@ class GameOfLife {
 
         //Event Listener for Light-Weight Spaceship
         document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_LIGHT_WEIGHT).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
             this.filledGrids.add([4, 4]);
             this.filledGrids.add([5, 4]);
             this.filledGrids.add([6, 4]);
@@ -626,7 +638,7 @@ class GameOfLife {
 
         //Event Listener for Medium weight spaceship
         document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_MEDIUM_WEIGHT).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([5, 3]);
             this.filledGrids.add([6, 3]);
@@ -652,7 +664,7 @@ class GameOfLife {
 
         //Event Listener for Heavy weight spaceship
         document.getElementById(HTML_ELEMENT_ID_SPACESHIPS_HEAVY_WEIGHT).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([9, 3]);
             this.filledGrids.add([9, 4]);
@@ -682,7 +694,7 @@ class GameOfLife {
     addSpecialEventListeners() {
         //Event Listener for Gosper Glider Gun
         document.getElementById(HTML_ELEMENT_ID_SPECIAL_GOSPER_GLIDER_GUN).addEventListener('mousedown', () => {
-            this.filledGrids.clear();
+            this.resetCanvas();
 
             this.filledGrids.add([3, 6]);
             this.filledGrids.add([4, 6]);
