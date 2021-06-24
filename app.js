@@ -103,13 +103,17 @@ class GameOfLife {
                         this.fillGrid(this.gridIndex);
                     }
                 }
+            } else {
+                this.canvasDom.style['backgroundColor'] = "lightgrey";
             }
 
         });
         this.canvasDom.addEventListener("mouseup", () => {
             this.mouseDown = false;
-
             this.gridIndex = [-1, -1];
+            if (this.isNavigationEnabled) {
+                this.canvasDom.style['backgroundColor'] = "white";
+            }
 
         });
         this.canvasDom.addEventListener("mousemove", (e) => {
@@ -198,6 +202,7 @@ class GameOfLife {
                 this.navigationImageDom.style['filter'] = 'invert(1)';
             } else {
                 this.navigationImageDom.style['filter'] = 'none';
+                this.canvasDom.style['backgroundColor'] = "white";
             }
         })
     }
