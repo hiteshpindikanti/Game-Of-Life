@@ -114,6 +114,7 @@ class GameOfLife {
 
         //Event Listener for Options button
         this.optionsButtonDom.addEventListener('click', () => { this.optionsButtonEventAction(); });
+        window.addEventListener('click', (e) => { this.hideMenuOptions(e); });
     }
 
     canvasMouseDownEventAction(e) {
@@ -232,11 +233,22 @@ class GameOfLife {
     }
 
     optionsButtonEventAction() {
-        if (this.dropdownContentDom.style['display'] == 'none') {
-            this.dropdownContentDom.style['display'] = 'block';
-        } else {
-            this.dropdownContentDom.style['display'] = 'none'
+
+        this.dropdownContentDom.style['display'] = 'block';
+
+    }
+
+    hideMenuOptions(e) {
+        if (this.dropdownContentDom.style['display'] == 'block' &&
+            !this.isCoordinateInside({ x: e.clientX, y: e.clientY }, this.dropdownContentDom.getBoundingClientRect()) &&
+            !this.isCoordinateInside({ x: e.clientX, y: e.clientY }, this.optionsButtonDom.getBoundingClientRect())) {
+            this.dropdownContentDom.style['display'] = 'none';
         }
+    }
+
+    isCoordinateInside(coordinates, domElementRect) {
+        return (coordinates.x <= domElementRect.right && coordinates.x >= domElementRect.left &&
+            coordinates.y <= domElementRect.bottom && coordinates.y >= domElementRect.top);
     }
 
     resetCanvas() {
