@@ -7,6 +7,8 @@ const HTML_ELEMENT_ID_TOGGLE_SWITCH = 'toggle-switch';
 const HTML_ELEMENT_ID_NAVIGATION_CHECKBOX = 'canvas-navigation-checkbox';
 const HTML_ELEMENT_ID_NAVIGATION_IMG = 'canvas-navigation-icon';
 const HTML_ELEMENT_ID_GENERATION_NUMBER = 'generation-number';
+const HTML_ELEMENT_ID_OPTIONS_BUTTON = 'options-button';
+const HTML_ELEMENT_ID_DROPDOWN_CONTENT = 'dropdown-content';
 
 const HTML_ELEMENT_ID_STILL_LIFE_BLOCK = 'still-lifes__block';
 const HTML_ELEMENT_ID_STILL_LIFE_BEE_HIVE = 'still-lifes__bee-hive';
@@ -56,6 +58,8 @@ class GameOfLife {
         this.navigationCheckboxDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_CHECKBOX);
         this.navigationImageDom = document.getElementById(HTML_ELEMENT_ID_NAVIGATION_IMG);
         this.generationNumberDom = document.getElementById(HTML_ELEMENT_ID_GENERATION_NUMBER);
+        this.optionsButtonDom = document.getElementById(HTML_ELEMENT_ID_OPTIONS_BUTTON);
+        this.dropdownContentDom = document.getElementById(HTML_ELEMENT_ID_DROPDOWN_CONTENT);
 
         this.prevZoomValue = this.zoomValue;
         this.gameSimulationFlag = false;
@@ -107,6 +111,9 @@ class GameOfLife {
 
         //Event Listener for Navigation Checkbox
         this.navigationCheckboxDom.addEventListener('change', () => { this.navigationCheckboxEventAction(); });
+
+        //Event Listener for Options button
+        this.optionsButtonDom.addEventListener('click', () => { this.optionsButtonEventAction(); });
     }
 
     canvasMouseDownEventAction(e) {
@@ -221,6 +228,14 @@ class GameOfLife {
         } else {
             this.navigationImageDom.style['filter'] = 'none';
             this.canvasDom.style['backgroundColor'] = "white";
+        }
+    }
+
+    optionsButtonEventAction() {
+        if (this.dropdownContentDom.style['display'] == 'none') {
+            this.dropdownContentDom.style['display'] = 'block';
+        } else {
+            this.dropdownContentDom.style['display'] = 'none'
         }
     }
 
