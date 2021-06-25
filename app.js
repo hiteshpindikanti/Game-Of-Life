@@ -83,17 +83,87 @@ class GameOfLife {
     addCanvasEventListeners = () => {
 
         // Event Listeners for marking grids
-        this.canvasDom.addEventListener("mousedown", (e) => {
+        this.canvasDom.addEventListener("mousedown", (e) => { this.canvasMouseDownEventAction(e); });
+        this.canvasDom.addEventListener("mouseup", () => { this.canvasMouseUpEventAction(); });
+        this.canvasDom.addEventListener("mousemove", (e) => { this.canvasMouseMoveEventAction(e); });
+
+        // Event Listener for Zoom input range bar
+        this.zoomDom.addEventListener('input', () => { this.zoomRangeInputEventAction(); });
+
+        // Event Listener for Speed input range bar
+        this.speedDom.addEventListener('input', () => { this.speedRangeInputEventAction(); });
+
+        // Event Listener for resizing the page
+        window.addEventListener('resize', () => { this.refreshGrid(); })
+
+        // Event Listener for play button
+        this.playButtonDom.addEventListener('click', () => { this.playButtonEventAction(); });
+
+        // Event Listener for Reset Button
+        this.resetButtonDom.addEventListener('click', () => { this.resetCanvas(); });
+
+        //Event Listener for Grid Lines Toggle Switch
+        this.gridLinesToggleDom.addEventListener('change', () => { this.gridLinesToggleSwitchEventAction(); });
+
+        //Event Listener for Navigation Checkbox
+        this.navigationCheckboxDom.addEventListener('change', () => { this.navigationCheckboxEventAction(); });
+    }
+
+    canvasMouseDownEventAction(e) {
+        this.prevGridIndex = this.gridIndex;
+        this.gridIndex = [
+            Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
+            Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
+        ];
+
+        this.mouseDown = true;
+        if (!this.isNavigationEnabled) {
+            //Mark the grids
+            if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                if (this.filledGrids.has(this.gridIndex)) {
+                    this.filledGrids.delete(this.gridIndex);
+                    this.emptyGrid(this.gridIndex);
+
+                } else {
+                    this.filledGrids.add(this.gridIndex);
+                    this.fillGrid(this.gridIndex);
+                }
+            }
+        } else {
+            this.canvasDom.style['backgroundColor'] = "lightgrey";
+        }
+
+    }
+
+    canvasMouseUpEventAction() {
+        this.mouseDown = false;
+        this.gridIndex = [-1, -1];
+        if (this.isNavigationEnabled) {
+            this.canvasDom.style['backgroundColor'] = "white";
+        }
+
+    }
+
+    canvasMouseMoveEventAction(e) {
+        if (this.mouseDown) {
             this.prevGridIndex = this.gridIndex;
             this.gridIndex = [
                 Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
                 Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
             ];
+            if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                if (this.isNavigationEnabled) {
+                    //Navigate the Canvas
+                    if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
+                        let newFilledGrids = this.shiftFilledGrids(this.filledGrids,
+                            this.gridIndex[0] - this.prevGridIndex[0],
+                            this.gridIndex[1] - this.prevGridIndex[1]);
+                        this.filledGrids = newFilledGrids;
+                        this.refreshGrid();
+                    }
+                } else {
+                    // Mark Grids
 
-            this.mouseDown = true;
-            if (!this.isNavigationEnabled) {
-                //Mark the grids
-                if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
                     if (this.filledGrids.has(this.gridIndex)) {
                         this.filledGrids.delete(this.gridIndex);
                         this.emptyGrid(this.gridIndex);
@@ -103,108 +173,55 @@ class GameOfLife {
                         this.fillGrid(this.gridIndex);
                     }
                 }
-            } else {
-                this.canvasDom.style['backgroundColor'] = "lightgrey";
             }
+        }
+    }
 
-        });
-        this.canvasDom.addEventListener("mouseup", () => {
-            this.mouseDown = false;
-            this.gridIndex = [-1, -1];
-            if (this.isNavigationEnabled) {
-                this.canvasDom.style['backgroundColor'] = "white";
-            }
-
-        });
-        this.canvasDom.addEventListener("mousemove", (e) => {
-            if (this.mouseDown) {
-                this.prevGridIndex = this.gridIndex;
-                this.gridIndex = [
-                    Math.floor((e.clientX - this.canvasDom.getBoundingClientRect().left) / this.zoomValue),
-                    Math.floor((e.clientY - this.canvasDom.getBoundingClientRect().top) / this.zoomValue)
-                ];
-                if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
-                    if (this.isNavigationEnabled) {
-                        //Navigate the Canvas
-                        if (this.prevGridIndex.toString() != this.gridIndex.toString()) {
-                            let newFilledGrids = this.shiftFilledGrids(this.filledGrids,
-                                this.gridIndex[0] - this.prevGridIndex[0],
-                                this.gridIndex[1] - this.prevGridIndex[1]);
-                            this.filledGrids = newFilledGrids;
-                            this.refreshGrid();
-                        }
-                    } else {
-                        // Mark Grids
-
-                        if (this.filledGrids.has(this.gridIndex)) {
-                            this.filledGrids.delete(this.gridIndex);
-                            this.emptyGrid(this.gridIndex);
-
-                        } else {
-                            this.filledGrids.add(this.gridIndex);
-                            this.fillGrid(this.gridIndex);
-                        }
-                    }
-                }
-            }
-        });
-
-        // Event Listener for Zoom input range bar
-        this.zoomDom.addEventListener('input', () => {
-            this.prevZoomValue = this.zoomValue;
-            this.zoomValue = parseInt(this.zoomDom.value);
-            if (this.prevZoomValue >= 10 && this.zoomValue < 10) {
-                this.gridLinesToggleDom.checked = false;
-                this.gridLines = false;
-                this.refreshGrid();
-            } else if (this.zoomValue >= 10 && this.prevZoomValue < 10) {
-                this.gridLinesToggleDom.checked = true;
-                this.gridLines = true;
-                this.refreshGrid();
-            }
+    zoomRangeInputEventAction() {
+        this.prevZoomValue = this.zoomValue;
+        this.zoomValue = parseInt(this.zoomDom.value);
+        if (this.prevZoomValue >= 10 && this.zoomValue < 10) {
+            this.gridLinesToggleDom.checked = false;
+            this.gridLines = false;
             this.refreshGrid();
-        });
-
-        // Event Listener for Speed input range bar
-        this.speedDom.addEventListener('input', () => {
-            this.speedValue = parseInt(this.speedDom.value) / 100;
-        });
-
-        // Event Listener for resizing the page
-        window.addEventListener('resize', () => { this.refreshGrid() })
-        this.playButtonDom.addEventListener('click', () => {
-
-            if (this.playButtonDom.innerHTML == 'Start') {
-                this.playButtonDom.innerHTML = 'Stop ';
-                this.playButtonDom.style['background-color'] = STOP_BUTTON_COLOR;
-                this.gameSimulationFlag = true;
-                this.simulateWorld();
-            } else {
-                this.playButtonDom.innerHTML = 'Start';
-                this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
-                this.gameSimulationFlag = false;
-            }
-        });
-
-        // Event Listener for Reset Button
-        this.resetButtonDom.addEventListener('click', () => { this.resetCanvas(); });
-
-        //Event Listener for Grid Lines Toggle Switch
-        this.gridLinesToggleDom.addEventListener('change', () => {
-            this.gridLines = !this.gridLines;
+        } else if (this.zoomValue >= 10 && this.prevZoomValue < 10) {
+            this.gridLinesToggleDom.checked = true;
+            this.gridLines = true;
             this.refreshGrid();
-        });
+        }
+        this.refreshGrid();
+    }
 
-        //Event Listener for Navigation Checkbox
-        this.navigationCheckboxDom.addEventListener('change', () => {
-            this.isNavigationEnabled = this.navigationCheckboxDom.checked;
-            if (this.isNavigationEnabled) {
-                this.navigationImageDom.style['filter'] = 'invert(1)';
-            } else {
-                this.navigationImageDom.style['filter'] = 'none';
-                this.canvasDom.style['backgroundColor'] = "white";
-            }
-        })
+    speedRangeInputEventAction() {
+        this.speedValue = parseInt(this.speedDom.value) / 100;
+    }
+
+    playButtonEventAction() {
+        if (this.playButtonDom.innerHTML == 'Start') {
+            this.playButtonDom.innerHTML = 'Stop ';
+            this.playButtonDom.style['background-color'] = STOP_BUTTON_COLOR;
+            this.gameSimulationFlag = true;
+            this.simulateWorld();
+        } else {
+            this.playButtonDom.innerHTML = 'Start';
+            this.playButtonDom.style['background-color'] = START_BUTTON_COLOR;
+            this.gameSimulationFlag = false;
+        }
+    }
+
+    gridLinesToggleSwitchEventAction() {
+        this.gridLines = this.gridLinesToggleDom.checked;
+        this.refreshGrid();
+    }
+
+    navigationCheckboxEventAction() {
+        this.isNavigationEnabled = this.navigationCheckboxDom.checked;
+        if (this.isNavigationEnabled) {
+            this.navigationImageDom.style['filter'] = 'invert(1)';
+        } else {
+            this.navigationImageDom.style['filter'] = 'none';
+            this.canvasDom.style['backgroundColor'] = "white";
+        }
     }
 
     resetCanvas() {
@@ -226,9 +243,7 @@ class GameOfLife {
             } else {
                 let newGridIndices = this.getNextInstance(this.filledGrids);
                 this.incrementGenerationNumber();
-
                 this.drawGridLines();
-
 
                 for (let coordinates of[...newGridIndices].map(JSON.parse)) {
                     this.fillGrid(coordinates);
@@ -328,7 +343,6 @@ class GameOfLife {
         // Any dead cell with three live neighbours becomes a live cell.
         // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-
         let nextFilledGrids = new ListSet();
         let allAdjacentGrids = new ListSet();
         for (let gridIndex of[...filledGrids].map(JSON.parse)) {
@@ -397,6 +411,7 @@ class GameOfLife {
             this.zoomValue = 30;
             this.zoomDom.value = this.zoomValue;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -415,6 +430,7 @@ class GameOfLife {
             this.zoomValue = 30;
             this.zoomDom.value = this.zoomValue;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -436,6 +452,7 @@ class GameOfLife {
             this.zoomValue = 30;
             this.zoomDom.value = this.zoomValue;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -454,6 +471,7 @@ class GameOfLife {
             this.zoomValue = 30;
             this.zoomDom.value = this.zoomValue;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -490,6 +508,7 @@ class GameOfLife {
             this.speedValue = 50 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -510,6 +529,7 @@ class GameOfLife {
             this.speedValue = 50 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -532,6 +552,7 @@ class GameOfLife {
             this.speedValue = 50 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -595,6 +616,7 @@ class GameOfLife {
             this.speedValue = 50 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
     }
@@ -615,6 +637,7 @@ class GameOfLife {
             this.speedValue = 90 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -638,6 +661,7 @@ class GameOfLife {
             this.speedValue = 90 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -664,6 +688,7 @@ class GameOfLife {
             this.speedValue = 90 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
 
@@ -692,6 +717,7 @@ class GameOfLife {
             this.speedValue = 90 / 100;
             this.speedDom.value = this.speedValue * 100;
             this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
     }
@@ -744,6 +770,8 @@ class GameOfLife {
             this.zoomDom.value = this.zoomValue;
             this.speedValue = 90 / 100;
             this.speedDom.value = this.speedValue * 100;
+            this.gridLines = true;
+            this.gridLinesToggleDom.checked = this.gridLines;
             this.refreshGrid();
         });
     }
