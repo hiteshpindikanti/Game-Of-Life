@@ -289,6 +289,8 @@ class GameOfLife {
 
         this.canvasDom.width = document.getElementsByTagName('body')[0].clientWidth - 2; //Taking into account the Border width
         this.canvasDom.height = (window.innerHeight - document.getElementsByClassName('upper-panel')[0].clientHeight) * 0.9;
+        // this.canvasDom.style['maxWidth'] = document.getElementsByTagName('body')[0].clientWidth - 2; //Taking into account the Border width
+        // this.canvasDom.style['maxHeight'] = (window.innerHeight - document.getElementsByClassName('upper-panel')[0].clientHeight) * 0.9;
 
         let ctx = this.canvasDom.getContext('2d');
 
@@ -342,8 +344,10 @@ class GameOfLife {
         let adjacentGrids = new ListSet();
         const x = gridIndex[0];
         const y = gridIndex[1];
-        let xMinFlag = x > 0;
-        let yMinFlag = y > 0;
+        // let xMinFlag = x > 0;
+        // let yMinFlag = y > 0;
+        let xMinFlag = true;
+        let yMinFlag = true;
         adjacentGrids.add([x + 1, y]);
         adjacentGrids.add([x, y + 1]);
         adjacentGrids.add([x + 1, y + 1]);

@@ -237,6 +237,7 @@ input:checked+.slider:before {
 
 #world {
     border: 1px solid black;
+    overflow: scroll;
 }
 
 .canvas-container .canvas-navigation-control {
